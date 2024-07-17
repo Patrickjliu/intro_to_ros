@@ -7,10 +7,7 @@ from rclpy.qos import QoSProfile, QoSHistoryPolicy, QoSReliabilityPolicy, QoSDur
 
 class BlueROV2Sensors(Node):
     """
-    Node for subscribing to BlueROV2 sensor topics and monitoring battery voltage.
-
-    This class subscribes to the battery and IMU topics of a BlueROV2 vehicle using ROS 2,
-    and monitors the battery voltage, logging a warning if the voltage is low.
+    Node for subscribing to BlueROV2 sensor topics and monitoring battery voltage, IMU data, and pressure.
     """
 
     def __init__(self):
@@ -95,7 +92,7 @@ class BlueROV2Sensors(Node):
         msg (BatteryState)
         """
         self.battery = msg
-        # self.get_logger().info(f"Battery Voltage: {msg.voltage} V")
+        self.get_logger().info(f"Battery Voltage: {msg.voltage} V")
 
     def imu_callback(self, msg: Imu):
         """
@@ -105,7 +102,10 @@ class BlueROV2Sensors(Node):
         msg (Imu)
         """
         self.imu = msg
-        # self.get_logger().info(f"IMU Orientation: {msg.orientation}")
+        # self.get_logger().info(f"IMU (Orientation, Angular Velocity, Linear Acceleration): {msg.orientation}    {msg.angular_velocity}   {msg.linear_acceleration}")
+        self.get_logger().info(f"IMU Orientation: {msg.orientation}")
+        self.get_logger().info(f"IMU Angular Velocity: {msg.angular_velocity}")
+        self.get_logger().info(f"IMU Linear Acceleration: {msg.linear_acceleration}")
 
     def check_battery_voltage(self):
         """
@@ -114,14 +114,11 @@ class BlueROV2Sensors(Node):
         if self.battery is not None and self.battery.voltage < 12:
             self.get_logger().warn(f'Battery voltage is low: {self.battery.voltage}V')
 
-def main(args=None):
+def main():
     """
     Main function to initialize and spin the BlueROV2Sensors node.
-    
-    Parameters:
-    args (list): List of command line arguments passed to the script (default is None).
     """
-    rclpy.init(args=args)
+    rclpy.init()
     node = BlueROV2Sensors()
 
     try:

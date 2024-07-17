@@ -2,8 +2,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-g = 9.81  # Acceleration due to gravity (m/s^2)
-
+g = 9.81  # m/s^2
 
 def calculate_buoyancy(V: float, density_fluid: float) -> float:
     """
