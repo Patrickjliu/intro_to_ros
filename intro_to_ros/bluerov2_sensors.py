@@ -93,7 +93,7 @@ class BlueROV2Sensors(Node):
         msg (BatteryState)
         """
         self.battery = msg
-        self.get_logger().info(f"Battery Voltage: {msg.voltage} V")
+        # self.get_logger().info(f"Battery Voltage: {msg.voltage} V")
 
     def imu_callback(self, msg: Imu):
         """
@@ -104,9 +104,9 @@ class BlueROV2Sensors(Node):
         """
         self.imu = msg
         # self.get_logger().info(f"IMU (Orientation, Angular Velocity, Linear Acceleration): {msg.orientation}    {msg.angular_velocity}   {msg.linear_acceleration}")
-        self.get_logger().info(f"IMU Orientation: {msg.orientation}")
-        self.get_logger().info(f"IMU Angular Velocity: {msg.angular_velocity}")
-        self.get_logger().info(f"IMU Linear Acceleration: {msg.linear_acceleration}")
+        # self.get_logger().info(f"IMU Orientation: {msg.orientation}")
+        # self.get_logger().info(f"IMU Angular Velocity: {msg.angular_velocity}")
+        # self.get_logger().info(f"IMU Linear Acceleration: {msg.linear_acceleration}")
 
     def check_battery_voltage(self):
         """
