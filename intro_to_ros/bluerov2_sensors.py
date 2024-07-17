@@ -71,7 +71,8 @@ class BlueROV2Sensors(Node):
         msg (FluidPressure)
         """
         self.static_pressure = msg
-        depth = (self.static_pressure.fluid_pressure - 101325) / (self.water_density * self.gravity)  # Subtracting atmospheric pressure (Pa)
+        # P = ρgh -> h = P/ρg
+        depth = (self.static_pressure.fluid_pressure - 101325) / (self.water_density * self.gravity)  # Subtracting atmospheric pressure (Pa) -- 101325
         self.get_logger().info(f"Static Pressure: {msg.fluid_pressure} Pa, Calculated Depth: {depth:.2f} meters")
 
     def diff_pressure_callback(self, msg: FluidPressure):
