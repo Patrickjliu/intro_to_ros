@@ -183,7 +183,7 @@ def calculate_auv2_angular_acceleration(
     T: np.ndarray, alpha: float, L: float, l: float, theta: float, inertia: float = 100
 ) -> float:
     """
-    Calculate the angular acceleration of a multi-thruster AUV.
+    Calculate the angular acceleration of a AUV.
 
     Parameters:
     T (np.ndarray): Thrust magnitudes from four thrusters (N)
@@ -219,7 +219,6 @@ def calculate_auv2_angular_acceleration(
 
     return total_torque / inertia
 
-
 def simulate_auv2_motion(
     T: np.ndarray,
     alpha: float,
@@ -234,7 +233,7 @@ def simulate_auv2_motion(
     theta0: float = 0,
 ):
     """
-    Simulate the motion of a multi-thruster AUV in the 2D plane.
+    Simulate the motion of a AUV in the 2D plane.
 
     Parameters:
     T (np.ndarray): Thrust magnitudes from four thrusters (N)
@@ -250,7 +249,7 @@ def simulate_auv2_motion(
     theta0 (float): Initial orientation angle (radians), default is 0 radians
 
     Returns:
-    tuple: Time array, x positions, y positions, orientation angles, velocities, angular velocities, accelerations
+    np.ndarray: Time, x positions, y positions, orientation angles, velocities, angular velocities, accelerations
     """
     if (not isinstance(T, np.ndarray) or len(T) != 4 or L <= 0 or l <= 0 or mass <= 0 or inertia <= 0 or dt <= 0 or t_final <= 0):
         raise ValueError(
@@ -258,7 +257,6 @@ def simulate_auv2_motion(
         )
               
     n_steps = int(t_final / dt)
-    t = np.linspace(0, t_final, n_steps)
 
     x = np.zeros(n_steps)
     y = np.zeros(n_steps)
@@ -270,16 +268,26 @@ def simulate_auv2_motion(
     x[0], y[0], theta[0] = x0, y0, theta0
 
     for i in range(1, n_steps):
+        # Calculate linear acceleration
         acc = calculate_auv2_acceleration(T, alpha, theta[i - 1], mass)
+        # Calculate angular acceleration
         ang_acc = calculate_auv2_angular_acceleration(T, alpha, L, l, theta[i - 1], inertia)
 
+        # Update linear velocity
         v[i] = v[i - 1] + acc * dt
+        # Update angular velocity
         omega[i] = omega[i - 1] + ang_acc * dt
 
+        # Update orientation angle
         theta[i] = theta[i - 1] + omega[i] * dt
+        # Update x position
         x[i] = x[i - 1] + v[i] * np.cos(theta[i]) * dt
+        # Update y position
         y[i] = y[i - 1] + v[i] * np.sin(theta[i]) * dt
+        # Store acceleration
         a[i] = acc
+
+    t = np.linspace(0, t_final, n_steps)
 
     return t, x, y, theta, v, omega, a
 

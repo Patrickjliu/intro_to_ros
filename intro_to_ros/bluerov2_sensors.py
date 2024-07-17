@@ -25,17 +25,19 @@ class BlueROV2Sensors(Node):
         self.water_density = 1000 # kg/m^3 for freshwater
         self.gravity = 9.81 # m/s^2
 
-        # Subscription to the battery topic
-        self.battery_subscriber = self.create_subscription(
-            BatteryState,
-            '/mavros/battery',
-            self.battery_callback,
-            qos_profile=QoSProfile(
+        qos_profile=QoSProfile(
                 history=QoSHistoryPolicy.KEEP_LAST,
                 depth=10,
                 reliability=QoSReliabilityPolicy.BEST_EFFORT,
                 durability=QoSDurabilityPolicy.VOLATILE
             )
+
+        # Subscription to the battery topic
+        self.battery_subscriber = self.create_subscription(
+            BatteryState,
+            '/mavros/battery',
+            self.battery_callback,
+            qos_profile
         )
 
         # Subscription to the IMU topic
@@ -43,24 +45,14 @@ class BlueROV2Sensors(Node):
             Imu,
             '/mavros/imu/data',
             self.imu_callback,
-            qos_profile=QoSProfile(
-                history=QoSHistoryPolicy.KEEP_LAST,
-                depth=10,
-                reliability=QoSReliabilityPolicy.BEST_EFFORT,
-                durability=QoSDurabilityPolicy.VOLATILE
-            )
+            qos_profile
         )
         # Subscription to the IMU static pressure topic
         self.static_pressure_subscriber = self.create_subscription(
             FluidPressure,
             '/mavros/imu/static_pressure',
             self.static_pressure_callback,
-            qos_profile=QoSProfile(
-                history=QoSHistoryPolicy.KEEP_LAST,
-                depth=10,
-                reliability=QoSReliabilityPolicy.BEST_EFFORT,
-                durability=QoSDurabilityPolicy.VOLATILE
-            )
+            qos_profile
         )
 
         # Subscription to the IMU diff pressure topic
@@ -68,12 +60,7 @@ class BlueROV2Sensors(Node):
             FluidPressure,
             '/mavros/imu/diff_pressure',
             self.diff_pressure_callback,
-            qos_profile=QoSProfile(
-                history=QoSHistoryPolicy.KEEP_LAST,
-                depth=10,
-                reliability=QoSReliabilityPolicy.BEST_EFFORT,
-                durability=QoSDurabilityPolicy.VOLATILE
-            )
+            qos_profile
         )
 
         # Timer to periodically check battery voltage
