@@ -24,6 +24,8 @@ setup(
             'subscriber = intro_to_ros.subscriber:main',
             'bluerov2_sensors = intro_to_ros.bluerov2_sensors:main',
             'physics_sim = intro_to_ros.physics_sim:main',
+            'armer = intro_to_ros.armer:main',
+            'bluerov2_controls = intro_to_ros.bluerov2_controls:main',
         ],
     },
 )
