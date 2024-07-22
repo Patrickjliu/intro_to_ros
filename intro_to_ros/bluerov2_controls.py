@@ -42,45 +42,12 @@ class BlueROV2Controls(Node):
     def run_sequence(self):
         rc_msg = OverrideRCIn()
 
-        # Step 1: Go down
-        rc_msg.channels = [1500, 1500, 1600, 1500, 1500, 1500, 1500, 1500]
-        self.publisher.publish(rc_msg)
-        self.get_logger().info(f"Step 1: Descend - {rc_msg.channels}")
-
-        # Wait for a moment
-        rclpy.spin_once(self, timeout_sec=3)
-
-        # Step 2: Move forward
-        rc_msg.channels = [1600, 1500, 1500, 1500, 1500, 1500, 1500, 1500]
-        self.publisher.publish(rc_msg)
-        self.get_logger().info(f"Step 2: Move forward - {rc_msg.channels}")
-
-        # Wait for a moment
-        rclpy.spin_once(self, timeout_sec=3)
-
         # Step 3: Rotate 180 degrees
-        rc_msg.channels = [1500, 1500, 1500, 1900, 1500, 1500, 1500, 1500]
-        self.publisher.publish(rc_msg)
-        self.get_logger().info(f"Step 3: Rotate 180 - {rc_msg.channels}")
+        while True:
+            rc_msg.channels = [1500, 1500, 1500, 1500, 1700, 1500, 1500, 1500, 1500, 1100, 1500, 0, 0, 0, 0, 0, 0, 0]
+            self.publisher.publish(rc_msg)
+            self.get_logger().info(f"Step 3: Rotate 180 - {rc_msg.channels}")
 
-        # Wait for a moment
-        rclpy.spin_once(self, timeout_sec=3)
-
-        # Step 4: Move forward (same distance)
-        rc_msg.channels = [1600, 1500, 1500, 1500, 1500, 1500, 1500, 1500]
-        self.publisher.publish(rc_msg)
-        self.get_logger().info(f"Step 4: Move forward - {rc_msg.channels}")
-
-        # Wait for a moment
-        rclpy.spin_once(self, timeout_sec=3)
-
-        # Step 5: Ascend
-        rc_msg.channels = [1500, 1500, 1400, 1500, 1500, 1500, 1500, 1500]
-        self.publisher.publish(rc_msg)
-        self.get_logger().info(f"Step 5: Ascend - {rc_msg.channels}")
-
-        # Wait for a moment and then stop the sequence
-        rclpy.spin_once(self, timeout_sec=3)
         self.destroy_node()
 
     def send_request(self, arm: bool):
